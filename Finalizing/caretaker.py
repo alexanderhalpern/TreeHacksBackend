@@ -17,6 +17,7 @@ from datetime import datetime
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import re
+from transformers import pipeline
 
 
 pc = Pinecone(api_key='e7a07597-e49c-4873-9d3a-3a679c7bb29d')
@@ -28,6 +29,9 @@ client = OpenAI()
 API_URL = "https://api-inference.huggingface.co/models/lxyuan/distilbert-base-multilingual-cased-sentiments-student"
 headers = {"Authorization": "Bearer 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"}
 emebeddings_model = SentenceTransformer('all-MiniLM-L6-v2')
+
+classifier = pipeline("sentiment-analysis",
+                      model="michellejieli/emotion_text_classifier")
 
 
 # if not os.path.exists('embeddings.csv'):
@@ -73,17 +77,22 @@ class CareTaker:
             transcribedText = transcribedText.strip().replace("Thank you.", "")
             print("Text:", result)
 
-            memories = self.pinecone_index.query(
+            initial_memories = self.pinecone_index.query(
                 vector=generateEmbeddings(transcribedText), top_k=3, include_metadata=True)
+
+            memories = []
+            for im in initial_memories["matches"]:
+                if "label" not in im["metadata"] or im["metadata"]["label"] == "joy" or im["metadata"]["label"] == "neutral":
+                    memories.append(im)
 
             print(memories)
 
-            if len(memories["matches"]) > 2:
+            if len(memories) > 2:
                 user_request = f'''
                 Here is a record of a past message that the user sent you that might be related to the user's next message. You can choose to use or ignore this information depending on what you see fit.
-                {memories["matches"][0]['id']}
-                {memories["matches"][1]['id']}
-                {memories["matches"][2]['id']}
+                {memories[0]['id']}
+                {memories[1]['id']}
+                {memories[2]['id']}
                 '''
                 print(user_request)
 
@@ -153,10 +162,13 @@ class CareTaker:
             else:
                 embeddings = generateEmbeddings(transcribedText)
 
+            results = classifier(transcribedText)
+            label = results[0]["label"]
+
             self.pinecone_index.upsert(vectors=[{
                 "id": re.compile(r'[^\x00-\x7F]+').sub('', transcribedText),
                 "values": embeddings,
-                "metadata": {"date": str(datetime.now())}
+                "metadata": {"date": str(datetime.now()), "label": label}
             }])
 
             return self.conversation_context

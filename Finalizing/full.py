@@ -129,7 +129,7 @@ def receiveAudio():
             print(temp_filename)
             file.save(temp_filename)
             print(temp_filename)
-            # file.save("audio.mp3")
+            file.save("audio.wav")
 
             # Play the audio
             # audio = AudioSegment.from_file(
