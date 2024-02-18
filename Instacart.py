@@ -13,7 +13,7 @@ profile_path = r"C:\Users\Alexander\AppData\Local\Google\Chrome\User Data\Defaul
 
 chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
-chrome_options.add_argument("user-data-dir=" + profile_path)
+# chrome_options.add_argument("user-data-dir=" + profile_path)
 # chrome_options.add_argument("--start-maximized")
 
 
@@ -21,23 +21,23 @@ chrome_options.add_argument("user-data-dir=" + profile_path)
 driver = webdriver.Chrome(options=chrome_options)
 
 # URL of the Instacart CVS storefront
-# login_url = "https://www.instacart.com/login"
+login_url = "https://www.instacart.com/login"
 store_url = "https://www.instacart.com/store/cvs"
 
 
 # Open the URL
 
-# driver.get(login_url)
-# driver.implicitly_wait(8)
-# email_input = driver.find_element(By.CSS_SELECTOR, "input[type='email']")
-# email_input.send_keys("halperna22@gmail.com")
-# driver.implicitly_wait(5)
-# email_input = driver.find_element(By.CSS_SELECTOR, "input[type='password']")
-# email_input.send_keys("Treehacks1!")
-# submit_button = driver.find_element(
-#     By.CSS_SELECTOR, "button[class='e-ztomkz']")
-# submit_button.click()
-# driver.implicitly_wait(5)
+driver.get(login_url)
+driver.implicitly_wait(8)
+email_input = driver.find_element(By.CSS_SELECTOR, "input[type='email']")
+email_input.send_keys("halperna22@gmail.com")
+driver.implicitly_wait(5)
+email_input = driver.find_element(By.CSS_SELECTOR, "input[type='password']")
+email_input.send_keys("Treehacks1!")
+submit_button = driver.find_element(
+    By.CSS_SELECTOR, "button[class='e-ztomkz']")
+submit_button.click()
+time.sleep(5)
 # CVS_button = driver.find_element(By.CSS_SELECTOR, "img[alt='CVS®']")
 # CVS_button.click()
 # driver.implicitly_wait(5)
@@ -63,11 +63,11 @@ driver.get("https://www.instacart.com/store/checkout_v4?sid=53040")
 # time.sleep(8)
 choose_delivery_time = driver.find_element(By.CLASS_NAME, "e-rloafg")
 choose_delivery_time.click()
-phone_number = driver.find_element(By.CSS_SELECTOR, "input[type='tel']")
-phone_number.send_keys("2034518641")
-submit_phone_number = driver.find_element(By.CLASS_NAME, "e-sp84se")
-submit_phone_number.click()
-time.sleep(4)
+# phone_number = driver.find_element(By.CSS_SELECTOR, "input[type='tel']")
+# phone_number.send_keys("2034518641")
+# submit_phone_number = driver.find_element(By.CLASS_NAME, "e-sp84se")
+# submit_phone_number.click()
+# time.sleep(4)
 final_continue = driver.find_element(By.CLASS_NAME, "e-15utg5h")
 final_continue.click()
 time.sleep(8)
