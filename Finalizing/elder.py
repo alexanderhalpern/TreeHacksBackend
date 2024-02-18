@@ -23,7 +23,7 @@ class Elder:
         # Open stream
         stream = audio.open(format=FORMAT,
                             channels=CHANNELS,
-                            # input_device_index=1,
+                            # input_device_index=2,
                             rate=RATE,
                             input=True,
                             frames_per_buffer=CHUNK)
